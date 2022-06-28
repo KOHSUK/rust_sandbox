@@ -2,7 +2,7 @@ mod domain {
     pub trait GreetingRepository {
         type Message;
 
-        fn get_message(&self) -> Self::Message;
+        fn get(&self) -> Self::Message;
         fn to_string_messege(msg: Self::Message) -> String;
         fn from_string_message<S: Into<String>>(msg: S) -> Self::Message;
     }
@@ -13,7 +13,7 @@ mod domain {
 
     impl<T: GreetingRepository> GreetingRepositoryWrapper for T {
         fn get(&self) -> String {
-            let msg = self.get_message();
+            let msg = self.get();
             T::to_string_messege(msg)
         }
     }
@@ -29,7 +29,7 @@ mod repository {
     impl GreetingRepository for GreetingRepositoryA {
         type Message = String;
 
-        fn get_message(&self) -> Self::Message {
+        fn get(&self) -> Self::Message {
             self.msg.clone()
         }
 
@@ -60,7 +60,7 @@ mod repository {
     impl GreetingRepository for GreetingRepositoryB {
         type Message = Msg;
 
-        fn get_message(&self) -> Self::Message {
+        fn get(&self) -> Self::Message {
             self.msg.clone()
         }
 
@@ -142,7 +142,7 @@ mod test {
         impl GreetingRepository for MockGreeting {
             type Message = String;
 
-            fn get_message(&self) -> Self::Message {
+            fn get(&self) -> Self::Message {
                 "Hello from test".to_string()
             }
 
